@@ -11,7 +11,7 @@ export default class StatsScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state ={ }
+    this.state = {dataSource : []}
   }
 
   componentDidMount(){
@@ -19,42 +19,21 @@ export default class StatsScreen extends React.Component {
     this.props.navigation.addListener('willFocus', this.load)
   }
 
-     load = async () => {
+  
+  load = async () => {
      const deviceid = await AsyncStorage.getItem('deviceid'); 
-    return fetch('https://ellen-emojimood.builtwithdark.com/checkins?device='+deviceid)
+    return fetch('https://ellen-emojimood.builtwithdark.com/emojicount?device='+deviceid)
     .then((response) => response.json())
-    .then((response)=> { 
-    	let stats ={}
+    .then((response)=> {
 
-    	response.forEach((item)=>{
-    		let emojis = emo(item.emojis)
-    		emojis.forEach((emoji) => {
-    			if (!stats[emoji.text]){
-    				stats[emoji.text] = 0;
-    			}
-    			stats[emoji.text]++;
-    		});
-    	})
-
-    	let emojis = Object.keys(stats);
-
-    	let data = []
-    	emojis.forEach((emoji)=>{
-    		data.push({"emoji":emoji,"count":stats[emoji]})
-    	})
-
-
-
-
-
+      const keys = Object.keys(response)
+    	let data = keys.map(k => ({"emoji": k, "count": response[k]}))
 
     	this.setState({
           dataSource: data,
-        }, function(){
-
         });
- })
-    .catch((response)=>Alert.alert("errorsad"));
+    })
+    .catch((response)=>console.error(response));
   }
 
 
