@@ -27,11 +27,8 @@ export default class StatsScreen extends React.Component {
     .then((response) => response.json())
     .then((response)=> {
 
-      const keys = Object.keys(response)
-    	let data = keys.map(k => ({"emoji": k, "count": response[k]}))
-
     	this.setState({
-          dataSource: data,
+          dataSource: response,
         });
     })
     .catch((response)=>console.error(response));

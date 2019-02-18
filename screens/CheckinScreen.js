@@ -41,7 +41,6 @@ export default class HomeScreen extends React.Component {
         },
         body: JSON.stringify({
           emojilist: this.state.text,
-          secondParam: new Date(),
           device: deviceid
         }),
       })

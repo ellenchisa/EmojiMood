@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, AsyncStorage } from 'react-native';
+import { Alert, FlatList, ScrollView, StyleSheet, Text, AsyncStorage, View } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import uuid from 'react-native-uuid';
 
@@ -35,11 +35,18 @@ export default class HistoryScreen extends React.Component {
 
 
   render() {
+    const renderItem = ({item}) => {
+      return (<View style={styles.item}>
+        <Text>{(new Date(item.date.value)).toLocaleString('en-US')}</Text>
+        <Text>{item.emojis}</Text>
+      </View>)
+    }
+
     return (
 
       <FlatList
           data={this.state.dataSource}
-          renderItem={({item}) => <Text>{item.date.value}, {item.emojis}</Text>}
+          renderItem={renderItem}
           keyExtractor={(item, index) => '' + index}
          />
 
@@ -49,9 +56,7 @@ export default class HistoryScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
+  item: {
+    marginBottom: 8
+  }
 });
