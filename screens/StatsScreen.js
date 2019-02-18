@@ -2,7 +2,8 @@ import React from 'react';
 import { Alert, FlatList, ScrollView, StyleSheet, Text, AsyncStorage } from 'react-native';
 import { ExpoConfigView } from '@expo/samples';
 import uuid from 'react-native-uuid';
-var emo = require('emoji-tree');
+
+import { HOST } from '../constants/Dark';
 
 export default class StatsScreen extends React.Component {
   static navigationOptions = {
@@ -22,7 +23,7 @@ export default class StatsScreen extends React.Component {
   
   load = async () => {
      const deviceid = await AsyncStorage.getItem('deviceid'); 
-    return fetch('https://ellen-emojimood.builtwithdark.com/emojicount?device='+deviceid)
+    return fetch(`${HOST}/emojicount?device=${deviceid}`)
     .then((response) => response.json())
     .then((response)=> {
 

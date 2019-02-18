@@ -3,6 +3,8 @@ import { Alert, FlatList, ScrollView, StyleSheet, Text, AsyncStorage } from 'rea
 import { ExpoLinksView } from '@expo/samples';
 import uuid from 'react-native-uuid';
 
+import { HOST } from '../constants/Dark';
+
 export default class HistoryScreen extends React.Component {
   static navigationOptions = {
     title: 'History',
@@ -20,7 +22,7 @@ export default class HistoryScreen extends React.Component {
 
      load = async () => {
       const deviceid = await AsyncStorage.getItem('deviceid'); 
-    return fetch('https://ellen-emojimood.builtwithdark.com/checkins?device='+deviceid)
+    return fetch(`${HOST}/checkins?device=${deviceid}`)
     .then((response) => response.json())
     .then((response)=> { this.setState({
           dataSource: response,

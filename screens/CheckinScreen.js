@@ -16,6 +16,9 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 import uuid from 'react-native-uuid';
+import EmojiInput from 'react-native-emoji-input';
+
+import { HOST } from '../constants/Dark';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -27,37 +30,44 @@ export default class HomeScreen extends React.Component {
     this.state = {text: ''};
   }
 
+  postMoods = async () => {
+    console.log('posting moods');
+      const deviceid = await AsyncStorage.getItem('deviceid'); 
+      fetch(`${HOST}/checkins`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          emojilist: this.state.text,
+          secondParam: new Date(),
+          device: deviceid
+        }),
+      })
+      .then((response)=>{
+        console.log('updated')
+        this.setState({text: ''})
+      })
+      .catch((error)=>{Alert.alert("failedsad")});
+  }
+
   render() {
     return (
       <View style={styles.container}>
-
-        <View style={{padding: 10}}>
-        <TextInput
-        style={{height: 40}}
-        placeholder="Log your mood in emojis!"
-        onChangeText={(text) => this.setState({text})}
-        />
-        </View>
-
+        <Text style={{height: 50, width: "100%"}}>{this.state.text}</Text>
         <Button
-        onPress={async () => {
-          const deviceid = await AsyncStorage.getItem('deviceid'); 
-          fetch('https://ellen-emojimood.builtwithdark.com/checkins', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              emojilist: this.state.text,
-              secondParam: new Date(),
-              device: deviceid
-            }),
-          }).catch((error)=>{Alert.alert("failedsad")});
-
-        }}
+        onPress={this.postMoods}
         title="Save"
-        />          
+        />  
+        <View style={{padding: 0, height: 500}}>
+        <EmojiInput
+          onEmojiSelected={(emoji) => {
+            const all = this.state.text + emoji.char;
+            this.setState({text: all})
+          }}
+        />
+        </View>        
         </View>
       );
   }
@@ -84,16 +94,6 @@ export default class HomeScreen extends React.Component {
         );
     }
   }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-      );
-  };
 }
 
 const styles = StyleSheet.create({

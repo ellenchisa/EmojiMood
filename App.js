@@ -43,8 +43,10 @@ export default class App extends React.Component {
       }),
       AsyncStorage.getItem('deviceid').then((res) => {
           if(res==null){
-            return AsyncStorage.setItem('deviceid',uuid.v4());
-          }
+            const deviceid = uuid.v4();
+            AsyncStorage.setItem('deviceid', deviceid);
+            return deviceid;
+          } else return res;
       }),
     ]);
   };
