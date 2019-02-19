@@ -1,13 +1,14 @@
 import React from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, AsyncStorage } from 'react-native';
+import { Alert, View, StyleSheet, Text, AsyncStorage } from 'react-native';
 import { ExpoConfigView } from '@expo/samples';
 import uuid from 'react-native-uuid';
 
 import { HOST } from '../constants/Dark';
+import Styles from '../constants/Styles';
 
 export default class StatsScreen extends React.Component {
   static navigationOptions = {
-    title: 'Stats',
+    header: null
   };
 
   constructor(props){
@@ -36,14 +37,21 @@ export default class StatsScreen extends React.Component {
 
 
   render() {
+    const emojiStyle = {
+
+    }
     return (
-
-      <FlatList
-          data={this.state.dataSource}
-          renderItem={({item}) => <Text>{item.emoji}, {item.count}</Text>}
-          keyExtractor={(item, index) => '' + index}
-         />
-
+      <View style={styles.container}>
+        {this.state.dataSource.map((item, index) =>
+          (<Text key={index} style={{...emojiStyle, fontSize: item.count*30}}>{item.emoji}</Text>))}
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {...Styles.container, flexDirection: 'row'},
+  item: {
+    marginBottom: 8
+  }
+});

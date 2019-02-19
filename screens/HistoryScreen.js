@@ -4,10 +4,11 @@ import { ExpoLinksView } from '@expo/samples';
 import uuid from 'react-native-uuid';
 
 import { HOST } from '../constants/Dark';
+import Styles from '../constants/Styles';
 
 export default class HistoryScreen extends React.Component {
   static navigationOptions = {
-    title: 'History',
+    header: null
   };
 
   constructor(props){
@@ -43,8 +44,8 @@ export default class HistoryScreen extends React.Component {
     }
 
     return (
-
       <FlatList
+          style={styles.container}
           data={this.state.dataSource}
           renderItem={renderItem}
           keyExtractor={(item, index) => '' + index}
@@ -56,6 +57,7 @@ export default class HistoryScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
+  container: Styles.container,
   item: {
     marginBottom: 8
   }

@@ -19,10 +19,11 @@ import uuid from 'react-native-uuid';
 import EmojiInput from 'react-native-emoji-input';
 
 import { HOST } from '../constants/Dark';
+import Styles from '../constants/Styles';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Mood Entry',
+    header: null
   };
 
   constructor(props) {
@@ -51,10 +52,19 @@ export default class HomeScreen extends React.Component {
       .catch((error)=>{Alert.alert("failedsad")});
   }
 
+  clear = () => {
+    this.setState({text: ''})
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.top}>
+          <Button
+            style={styles.postButton}
+            onPress={this.clear}
+            title="Clear"
+          />
           <Text style={styles.displayText}>{this.state.text}</Text>
           <Button
             style={styles.postButton}
@@ -81,21 +91,18 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-  },
+  container: Styles.container,
   top: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 50
+    flexWrap: 'wrap',
+    height: 50,
   },
   displayText: {
     padding: 2,
-    fontSize: 16
+    fontSize: 40
   },
   postButton: {
     width: 20,

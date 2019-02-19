@@ -8,7 +8,7 @@ import HistoryScreen from '../screens/HistoryScreen';
 import StatsScreen from '../screens/StatsScreen';
 
 const CheckinStack = createStackNavigator({
-  Checkin: CheckinScreen,
+  Checkin: CheckinScreen
 });
 
 CheckinStack.navigationOptions = {
