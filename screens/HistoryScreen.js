@@ -1,10 +1,10 @@
 import React from 'react';
 import { Alert, FlatList, ScrollView, StyleSheet, Text, AsyncStorage, View } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
-import uuid from 'react-native-uuid';
 
 import { HOST } from '../constants/Dark';
 import Styles from '../constants/Styles';
+import ErrorPage from '../components/ErrorPage';
 
 export default class HistoryScreen extends React.Component {
   static navigationOptions = {
@@ -13,7 +13,10 @@ export default class HistoryScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state ={ }
+    this.state = {
+      dataSource: [],
+      error: null
+    }
   }
 
   componentDidMount(){
@@ -21,7 +24,7 @@ export default class HistoryScreen extends React.Component {
     this.props.navigation.addListener('willFocus', this.load)
   }
 
-     load = async () => {
+  load = async () => {
       const deviceid = await AsyncStorage.getItem('deviceid'); 
     return fetch(`${HOST}/checkins?device=${deviceid}`)
     .then((response) => response.json())
@@ -31,11 +34,18 @@ export default class HistoryScreen extends React.Component {
 
         });
  })
-    .catch((response)=>Alert.alert("errorsad"));
+    .catch( (error) => this.setState({error}) );
+  }
+
+  retryLoad = () => {
+    this.setState({error: null})
+    this.load()
   }
 
 
   render() {
+    if (this.state.error) return (<ErrorPage retryAction={this.retryLoad} />)
+
     const renderItem = ({item}) => {
       return (<View style={styles.item}>
         <Text>{(new Date(item.date.value)).toLocaleString('en-US')}</Text>

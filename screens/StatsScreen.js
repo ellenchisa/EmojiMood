@@ -1,10 +1,10 @@
 import React from 'react';
 import { Alert, View, StyleSheet, Text, AsyncStorage } from 'react-native';
 import { ExpoConfigView } from '@expo/samples';
-import uuid from 'react-native-uuid';
 
 import { HOST } from '../constants/Dark';
 import Styles from '../constants/Styles';
+import ErrorPage from '../components/ErrorPage';
 
 export default class StatsScreen extends React.Component {
   static navigationOptions = {
@@ -13,7 +13,10 @@ export default class StatsScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {dataSource : []}
+    this.state = {
+      dataSource : [],
+      error: null
+    }
   }
 
   componentDidMount(){
@@ -32,11 +35,18 @@ export default class StatsScreen extends React.Component {
           dataSource: response,
         });
     })
-    .catch((response)=>console.error(response));
+    .catch( (error) => this.setState({error}) );
+  }
+
+  retryLoad = () => {
+    this.setState({error: null})
+    this.load()
   }
 
 
   render() {
+    if (this.state.error) return (<ErrorPage retryAction={this.retryLoad} />)
+
     const emojiStyle = {
 
     }

@@ -15,11 +15,11 @@ import {
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
-import uuid from 'react-native-uuid';
 import EmojiInput from 'react-native-emoji-input';
 
 import { HOST } from '../constants/Dark';
 import Styles from '../constants/Styles';
+import ErrorPage from '../components/ErrorPage';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -28,11 +28,13 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {text: ''};
+    this.state = {
+      text: '',
+      error: null
+    };
   }
 
   postMoods = async () => {
-    console.log('posting moods');
       const deviceid = await AsyncStorage.getItem('deviceid'); 
       fetch(`${HOST}/checkins`, {
         method: 'POST',
@@ -46,17 +48,26 @@ export default class HomeScreen extends React.Component {
         }),
       })
       .then((response)=>{
-        console.log('updated')
         this.setState({text: ''})
       })
-      .catch((error)=>{Alert.alert("failedsad")});
+      .catch( (error) => this.setState({error}) );
   }
 
   clear = () => {
     this.setState({text: ''})
   }
 
+  retryLoad = () => {
+    this.setState({error: null})
+    this.postMoods()
+  }
+
   render() {
+    if (this.state.error)
+      return (<ErrorPage
+        retryAction={this.retryLoad}
+        message="Oops! We are having trouble receiving your moods." />)
+
     return (
       <View style={styles.container}>
         <View style={styles.top}>
@@ -79,6 +90,7 @@ export default class HomeScreen extends React.Component {
           categoryFontSize={32}
           categoryLabelHeight={20}
           categoryLabelTextStyle={styles.catLabel}
+          enableSearch={false}
           onEmojiSelected={(emoji) => {
             const all = this.state.text + emoji.char;
             this.setState({text: all})
@@ -97,7 +109,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    flexWrap: 'wrap',
+    flexWrap: 'nowrap',
     height: 50,
   },
   displayText: {
