@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, Text, AsyncStorage, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, AsyncStorage, View } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 
 import { HOST } from '../constants/Dark';

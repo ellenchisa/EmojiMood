@@ -81,6 +81,7 @@ export default class HomeScreen extends React.Component {
             style={styles.postButton}
             onPress={this.postMoods}
             title="Save"
+            disabled={this.state.text.length == 0}
           />
         </View>  
         <View style={{padding: 0, height: 500}}>
