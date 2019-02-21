@@ -51,12 +51,10 @@ export default createBottomTabNavigator({
   StatsStack,
 }, {
   'lazy': false,
+  'initialRouteName': 'CheckinStack',
   'tabBarOptions': {
     'activeTintColor': Colors.tabIconSelected,
     'inactiveTintColor': Colors.tabIconDefault,
-    'tabStyle': {
-      'initialTabIndex': 1
-    },
     'style': {
       'backgroundColor': Colors.tabBar,
       'borderTopColor': 'transparent'
