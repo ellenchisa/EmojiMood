@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Text, Button, Image } from 'react-native';
 
 import Styles from '../constants/Styles.js';
+import Colors from '../constants/Colors';
 
 export default class ErrorPage extends React.Component {
 
@@ -12,7 +13,9 @@ export default class ErrorPage extends React.Component {
           source={require('./img/error.png')}
         />
 				<Text>{this.props.message ? this.props.message : "Oops! Something went wrong with our servers"}</Text>
-				<Button onPress={this.props.retryAction} title="Try Again" />
+				<Button
+					color={Colors.tintColor}
+					onPress={this.props.retryAction} title="Try Again" />
 			</View>
 		)
 	}

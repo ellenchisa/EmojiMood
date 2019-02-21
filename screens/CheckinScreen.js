@@ -18,6 +18,7 @@ import { MonoText } from '../components/StyledText';
 import EmojiInput from 'react-native-emoji-input';
 
 import { HOST } from '../constants/Dark';
+import Colors, { seaBright, seaLight, seaPrimary, skyLight, skyPrimary, skyBright } from '../constants/Colors';
 import Styles from '../constants/Styles';
 import ErrorPage from '../components/ErrorPage';
 
@@ -35,7 +36,7 @@ export default class HomeScreen extends React.Component {
   }
 
   postMoods = async () => {
-      const deviceid = await AsyncStorage.getItem('deviceid'); 
+      const deviceid = await AsyncStorage.getItem('deviceid');
       fetch(`${HOST}/checkins`, {
         method: 'POST',
         headers: {
@@ -72,32 +73,37 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.top}>
           <Button
+            color={Colors.tintColor}
             style={styles.postButton}
             onPress={this.clear}
             title="Clear"
           />
           <Text style={styles.displayText}>{this.state.text}</Text>
           <Button
+            color={Colors.tintColor}
             style={styles.postButton}
             onPress={this.postMoods}
             title="Save"
             disabled={this.state.text.length == 0}
           />
-        </View>  
+        </View>
         <View style={{padding: 0, height: 500}}>
         <EmojiInput
-          keyboardBackgroundColor="transparent"
           enableFrequentlyUsedEmoji={false}
           categoryFontSize={32}
           categoryLabelHeight={20}
           categoryLabelTextStyle={styles.catLabel}
-          enableSearch={false}
+          enableSearch={true}
+          categoryHighlightColor={seaBright}
+          categoryUnhighlightedColor={seaPrimary}
+          showCategoryTab={false}
+          keyboardBackgroundColor='transparent'
           onEmojiSelected={(emoji) => {
             const all = this.state.text + emoji.char;
             this.setState({text: all})
           }}
         />
-        </View>        
+        </View>
         </View>
       );
   }
@@ -119,7 +125,6 @@ const styles = StyleSheet.create({
   },
   postButton: {
     width: 20,
-    backgroundColor: 'pink'
   },
   catLabel: {
     fontSize: 12,

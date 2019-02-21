@@ -4,6 +4,8 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import uuid from 'react-native-uuid';
 
+import { seaPrimary } from './constants/Colors';
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
@@ -65,6 +67,5 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 });

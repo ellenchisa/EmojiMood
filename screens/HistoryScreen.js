@@ -3,6 +3,7 @@ import { FlatList, ScrollView, StyleSheet, Text, AsyncStorage, View } from 'reac
 import { ExpoLinksView } from '@expo/samples';
 
 import { HOST } from '../constants/Dark';
+import { seaPrimary, seaBright, skyPrimary } from '../constants/Colors';
 import Styles from '../constants/Styles';
 import ErrorPage from '../components/ErrorPage';
 
@@ -25,7 +26,7 @@ export default class HistoryScreen extends React.Component {
   }
 
   load = async () => {
-      const deviceid = await AsyncStorage.getItem('deviceid'); 
+      const deviceid = await AsyncStorage.getItem('deviceid');
     return fetch(`${HOST}/checkins?device=${deviceid}`)
     .then((response) => response.json())
     .then((response)=> { this.setState({
@@ -48,8 +49,8 @@ export default class HistoryScreen extends React.Component {
 
     const renderItem = ({item}) => {
       return (<View style={styles.item}>
-        <Text>{(new Date(item.date.value)).toLocaleString('en-US')}</Text>
-        <Text>{item.emojis}</Text>
+        <Text style={styles.emojis}>{item.emojis}</Text>
+        <Text style={styles.date}>{(new Date(item.date.value)).toLocaleString('en-US')}</Text>
       </View>)
     }
 
@@ -67,8 +68,18 @@ export default class HistoryScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-  container: Styles.container,
+  container: {
+    ...Styles.container,
+    padding: 8
+  },
   item: {
-    marginBottom: 8
+    marginBottom: 16
+  },
+  emojis: {
+    fontSize: 24
+  },
+  date: {
+    fontSize: 12,
+    color: skyPrimary,
   }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Image } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -7,22 +7,18 @@ import CheckinScreen from '../screens/CheckinScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import StatsScreen from '../screens/StatsScreen';
 
+import Colors, {seaBright, seaLight, seaPrimary} from '../constants/Colors';
+
 const CheckinStack = createStackNavigator({
   Checkin: CheckinScreen
 });
 
 CheckinStack.navigationOptions = {
   tabBarLabel: 'Checkin',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
+  tabBarIcon: ({ focused }) =>
+    (focused ?
+    <Image source={require('./img/tab_checkin-on.png')} /> :
+    <Image source={require('./img/tab_checkin.png')} />),
 };
 
 const HistoryStack = createStackNavigator({
@@ -31,12 +27,10 @@ const HistoryStack = createStackNavigator({
 
 HistoryStack.navigationOptions = {
   tabBarLabel: 'History',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
+  tabBarIcon: ({ focused }) =>
+    (focused ?
+    <Image source={require('./img/tab_history-on.png')} /> :
+    <Image source={require('./img/tab_history.png')} />),
 };
 
 const StatsStack = createStackNavigator({
@@ -45,12 +39,10 @@ const StatsStack = createStackNavigator({
 
 StatsStack.navigationOptions = {
   tabBarLabel: 'Stats',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
+  tabBarIcon: ({ focused }) =>
+    (focused ?
+      <Image source={require('./img/tab_stats-on.png')} /> :
+      <Image source={require('./img/tab_stats.png')} />),
 };
 
 export default createBottomTabNavigator({
@@ -58,9 +50,16 @@ export default createBottomTabNavigator({
   CheckinStack,
   StatsStack,
 }, {
+  'lazy': false,
   'tabBarOptions': {
+    'activeTintColor': Colors.tabIconSelected,
+    'inactiveTintColor': Colors.tabIconDefault,
     'tabStyle': {
-      'initialTabIndex': 2
+      'initialTabIndex': 1
+    },
+    'style': {
+      'backgroundColor': Colors.tabBar,
+      'borderTopColor': 'transparent'
     }
   }
 });
