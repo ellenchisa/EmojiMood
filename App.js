@@ -4,7 +4,7 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import uuid from 'react-native-uuid';
 
-import { seaPrimary } from './constants/Colors';
+import { seaPrimary, seaBright, sunPrimary, sunBright } from './constants/Colors';
 
 export default class App extends React.Component {
   state = {
@@ -23,7 +23,8 @@ export default class App extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          {Platform.OS === 'ios' &&
+            <StatusBar backgroundColor='transparent'  />}
           <AppNavigator />
         </View>
       );
@@ -67,5 +68,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
   },
 });

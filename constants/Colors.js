@@ -7,18 +7,23 @@ export const seaBright = '#81CFD6' //'#7FDFE7'
 export const skyLight = '#E0CADB'
 export const skyPrimary = '#C6A9BF'
 export const skyBright = '#A16592'
+export const skyDark = '#521F46'
+export const sunDark = '#FFA023';
+export const seaDark = '#45A6AF';
 
-const tintColor = skyBright;
+
+const tintColor = '#A85995';
 
 export default {
   tintColor,
-  tabIconDefault: '#B5B6C9',
-  tabIconSelected: seaBright,
-  tabBar: '#E9E9EF',
+  tabIconDefault: '#FFD162',
+  tabIconSelected: seaDark,
+  tabBar: sunBright,//'#E9E9EF',
   errorBackground: 'red',
   errorText: '#fff',
   warningBackground: '#EAEB5E',
   warningText: '#666804',
   noticeBackground: tintColor,
   noticeText: '#fff',
+  gradient: [skyPrimary, seaPrimary, sunBright]
 };

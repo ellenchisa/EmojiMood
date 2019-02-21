@@ -1,24 +1,24 @@
 import React from 'react';
 import {
-  Alert,
   Button,
   Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   AsyncStorage,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { LinearGradient } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 import EmojiInput from 'react-native-emoji-input';
 
 import { HOST } from '../constants/Dark';
-import Colors, { seaBright, seaLight, seaPrimary, skyLight, skyPrimary, skyBright } from '../constants/Colors';
+import Colors, { seaBright, seaLight, seaPrimary,
+  skyLight, skyPrimary, skyBright,
+  sunBright, sunPrimary } from '../constants/Colors';
 import Styles from '../constants/Styles';
 import ErrorPage from '../components/ErrorPage';
 
@@ -70,7 +70,10 @@ export default class HomeScreen extends React.Component {
         message="Oops! We are having trouble receiving your moods." />)
 
     return (
-      <View style={styles.container}>
+      <LinearGradient
+        colors={Colors.gradient}
+        style={styles.container}
+      >
         <View style={styles.top}>
           <Button
             color={Colors.tintColor}
@@ -104,7 +107,7 @@ export default class HomeScreen extends React.Component {
           }}
         />
         </View>
-        </View>
+        </LinearGradient>
       );
   }
 }

@@ -3,6 +3,6 @@ export default {
     flex: 1,
     flexDirection: 'column',
     flexWrap: 'wrap',
-    marginTop: 20,
+    paddingTop: 20,
   }
 }

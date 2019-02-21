@@ -1,9 +1,10 @@
 import React from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, AsyncStorage, View } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
+
+import { LinearGradient } from 'expo';
 
 import { HOST } from '../constants/Dark';
-import { seaPrimary, seaBright, skyPrimary } from '../constants/Colors';
+import Colors, { seaPrimary, seaBright, skyPrimary, sunPrimary, sunBright } from '../constants/Colors';
 import Styles from '../constants/Styles';
 import ErrorPage from '../components/ErrorPage';
 
@@ -55,31 +56,31 @@ export default class HistoryScreen extends React.Component {
     }
 
     return (
+      <LinearGradient
+        colors={Colors.gradient}
+        style={Styles.container}
+      >
       <FlatList
-          style={styles.container}
           data={this.state.dataSource}
           renderItem={renderItem}
           keyExtractor={(item, index) => '' + index}
          />
-
+      </LinearGradient>
     );
   }
 }
 
 
 const styles = StyleSheet.create({
-  container: {
-    ...Styles.container,
-    padding: 8
-  },
   item: {
-    marginBottom: 16
+    marginBottom: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   emojis: {
-    fontSize: 24
+    fontSize: 40
   },
   date: {
     fontSize: 12,
-    color: skyPrimary,
   }
 });
