@@ -4,8 +4,6 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import uuid from 'react-native-uuid';
 
-import { seaPrimary, seaBright, sunPrimary, sunBright } from './constants/Colors';
-
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,

@@ -5,12 +5,7 @@ import { LinearGradient } from 'expo';
 
 import { HOST } from '../constants/Dark';
 import Styles from '../constants/Styles';
-import Colors, {
-  skyBright, sunBright, seaBright,
-  skyLight, sunLight, seaLight,
-  skyPrimary, sunPrimary, seaPrimary,
-  skyDark
-} from '../constants/Colors';
+import Colors from '../constants/Colors';
 import ErrorPage from '../components/ErrorPage';
 
 export default class StatsScreen extends React.Component {
@@ -51,8 +46,6 @@ export default class StatsScreen extends React.Component {
     if (this.state.error) return (<ErrorPage retryAction={this.retryLoad} />)
 
     const max = this.state.dataSource.reduce((m, e) => e.count > m ? e.count : m, 0)
-    const bgcolors = [seaBright, skyBright]
-    const textcolors = [seaLight, skyLight]
 
     const renderItem = ({item, index}) => {
       return (<View style={styles.item}>
@@ -60,12 +53,12 @@ export default class StatsScreen extends React.Component {
         <View
           style={{...styles.count,
             flex: item.count,
-            backgroundColor: bgcolors[index%2]
+            backgroundColor: Colors.statsBar[index%2]
           }}
         ><Text
           style={{
             ...styles.countText,
-            color: textcolors[index%2]
+            color: Colors.statsBartx[index%2]
           }}
           >{item.count}</Text></View>
         <View style={{flex: max - item.count}}></View>
@@ -98,7 +91,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: 'bold',
     fontSize: 15,
-    color: skyDark
+    color: Colors.text,
   },
   item: {
     flex: 1,

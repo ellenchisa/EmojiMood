@@ -17,9 +17,7 @@ import EmojiInput from 'react-native-emoji-input';
 
 import Layout from '../constants/Layout';
 import { HOST } from '../constants/Dark';
-import Colors, { seaBright, seaLight, seaPrimary,
-  skyLight, skyPrimary, skyBright,
-  sunBright, sunPrimary } from '../constants/Colors';
+import Colors from '../constants/Colors';
 import Styles from '../constants/Styles';
 import ErrorPage from '../components/ErrorPage';
 
@@ -112,8 +110,6 @@ export default class HomeScreen extends React.Component {
           categoryLabelHeight={20}
           categoryLabelTextStyle={styles.catLabel}
           enableSearch={true}
-          categoryHighlightColor={seaBright}
-          categoryUnhighlightedColor={seaPrimary}
           showCategoryTab={false}
           keyboardBackgroundColor='transparent'
           onEmojiSelected={this.update}

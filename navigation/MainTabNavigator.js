@@ -7,7 +7,7 @@ import CheckinScreen from '../screens/CheckinScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import StatsScreen from '../screens/StatsScreen';
 
-import Colors, {seaBright, seaLight, seaPrimary} from '../constants/Colors';
+import Colors from '../constants/Colors';
 
 const CheckinStack = createStackNavigator({
   Checkin: CheckinScreen
