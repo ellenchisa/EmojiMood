@@ -4,7 +4,7 @@ import { ExpoConfigView } from '@expo/samples';
 import { LinearGradient } from 'expo';
 
 import { HOST } from '../constants/Dark';
-import Styles from '../constants/Styles';
+import { Styles } from '../constants/Layout';
 import Colors from '../constants/Colors';
 import ErrorPage from '../components/ErrorPage';
 
@@ -30,9 +30,8 @@ export default class StatsScreen extends React.Component {
   load = async () => {
      const deviceid = await AsyncStorage.getItem('deviceid');
     return fetch(`${HOST}/emojicount?device=${deviceid}`)
-    .then((response) => response.json())
-    .then((response)=> { this.setState({ dataSource: response });
-    })
+    .then( (response) => response.json() )
+    .then( (response) => this.setState({ dataSource: response }) )
     .catch( (error) => this.setState({error}) );
   }
 

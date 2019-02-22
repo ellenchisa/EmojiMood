@@ -18,7 +18,7 @@ import EmojiInput from 'react-native-emoji-input';
 import Layout from '../constants/Layout';
 import { HOST } from '../constants/Dark';
 import Colors from '../constants/Colors';
-import Styles from '../constants/Styles';
+import { Styles } from '../constants/Layout';
 import ErrorPage from '../components/ErrorPage';
 
 export default class HomeScreen extends React.Component {
@@ -53,9 +53,7 @@ export default class HomeScreen extends React.Component {
           device: deviceid
         }),
       })
-      .then((response)=>{
-        this.setState({moods: []})
-      })
+      .then( (response) => this.setState({moods: []}) )
       .catch( (error) => this.setState({error}) );
   }
 

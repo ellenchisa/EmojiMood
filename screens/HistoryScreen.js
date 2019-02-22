@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo';
 
 import { HOST } from '../constants/Dark';
 import Colors from '../constants/Colors';
-import Styles from '../constants/Styles';
+import { Styles } from '../constants/Layout';
 import ErrorPage from '../components/ErrorPage';
 
 export default class HistoryScreen extends React.Component {
@@ -27,15 +27,10 @@ export default class HistoryScreen extends React.Component {
   }
 
   load = async () => {
-      const deviceid = await AsyncStorage.getItem('deviceid');
+    const deviceid = await AsyncStorage.getItem('deviceid');
     return fetch(`${HOST}/checkins?device=${deviceid}`)
-    .then((response) => response.json())
-    .then((response)=> { this.setState({
-          dataSource: response,
-        }, function(){
-
-        });
- })
+    .then( (response) => response.json() )
+    .then( (response) => this.setState({dataSource: response}) )
     .catch( (error) => this.setState({error}) );
   }
 

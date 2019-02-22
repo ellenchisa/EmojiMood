@@ -14,7 +14,7 @@ const skyBright = '#A16592'
 const skyDark = '#521F46'
 
 export default {
-  tintColor: skyBright
+  tintColor: skyBright,
   tabIconDefault: '#FFD162',
   tabIconSelected: seaDark,
   tabBar: sunBright,//'#E9E9EF',
