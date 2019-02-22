@@ -15,6 +15,7 @@ import { LinearGradient } from 'expo';
 import { MonoText } from '../components/StyledText';
 import EmojiInput from 'react-native-emoji-input';
 
+import Layout from '../constants/Layout';
 import { HOST } from '../constants/Dark';
 import Colors, { seaBright, seaLight, seaPrimary,
   skyLight, skyPrimary, skyBright,
@@ -30,9 +31,15 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: '',
+      moods: [],
       error: null
     };
+  }
+
+  moodsToString = () => {
+      if (this.state.moods)
+        return this.state.moods.reduce((str, e) => str + e, "")
+      else return ""
   }
 
   postMoods = async () => {
@@ -44,23 +51,30 @@ export default class HomeScreen extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          emojilist: this.state.text,
+          emojilist: this.moodsToString(),
           device: deviceid
         }),
       })
       .then((response)=>{
-        this.setState({text: ''})
+        this.setState({moods: []})
       })
       .catch( (error) => this.setState({error}) );
   }
 
   clear = () => {
-    this.setState({text: ''})
+    this.setState({moods: []})
   }
 
   retryLoad = () => {
     this.setState({error: null})
     this.postMoods()
+  }
+
+  update = (emoji) => {
+    const { moods } = this.state;
+    if (moods.length >= 5) return;
+
+    this.setState({moods: moods.concat(emoji.char)})
   }
 
   render() {
@@ -69,6 +83,7 @@ export default class HomeScreen extends React.Component {
         retryAction={this.retryLoad}
         message="Oops! We are having trouble receiving your moods." />)
 
+    const displayText = this.moodsToString();
     return (
       <LinearGradient
         colors={Colors.gradient}
@@ -81,16 +96,16 @@ export default class HomeScreen extends React.Component {
             onPress={this.clear}
             title="Clear"
           />
-          <Text style={styles.displayText}>{this.state.text}</Text>
+          <Text style={styles.displayText}>{displayText}</Text>
           <Button
             color={Colors.tintColor}
             style={styles.postButton}
             onPress={this.postMoods}
             title="Save"
-            disabled={this.state.text.length == 0}
+            disabled={this.state.moods.length == 0}
           />
         </View>
-        <View style={{padding: 0, height: 500}}>
+        <View style={{padding: 0, height: Layout.window.height - 120}}>
         <EmojiInput
           enableFrequentlyUsedEmoji={false}
           categoryFontSize={32}
@@ -101,10 +116,8 @@ export default class HomeScreen extends React.Component {
           categoryUnhighlightedColor={seaPrimary}
           showCategoryTab={false}
           keyboardBackgroundColor='transparent'
-          onEmojiSelected={(emoji) => {
-            const all = this.state.text + emoji.char;
-            this.setState({text: all})
-          }}
+          onEmojiSelected={this.update}
+          emojiFontSize={32}
         />
         </View>
         </LinearGradient>
@@ -124,10 +137,13 @@ const styles = StyleSheet.create({
   },
   displayText: {
     padding: 2,
-    fontSize: 40
+    fontSize: 32,
+    flex: 5,
+    textAlign: 'center'
   },
   postButton: {
     width: 20,
+    flex: 1
   },
   catLabel: {
     fontSize: 12,

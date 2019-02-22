@@ -4,7 +4,7 @@ import { FlatList, ScrollView, StyleSheet, Text, AsyncStorage, View } from 'reac
 import { LinearGradient } from 'expo';
 
 import { HOST } from '../constants/Dark';
-import Colors, { seaPrimary, seaBright, skyPrimary, sunPrimary, sunBright } from '../constants/Colors';
+import Colors, { seaPrimary, seaBright, skyPrimary, sunPrimary, sunBright, skyDark } from '../constants/Colors';
 import Styles from '../constants/Styles';
 import ErrorPage from '../components/ErrorPage';
 
@@ -78,9 +78,10 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   emojis: {
-    fontSize: 40
+    fontSize: 32
   },
   date: {
-    fontSize: 12,
+    fontSize: 14,
+    color: skyDark
   }
 });
