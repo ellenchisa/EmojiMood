@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 import EmojiInput from 'react-native-emoji-input';
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 import Layout from '../constants/Layout';
 import { HOST } from '../constants/Dark';
@@ -101,7 +102,8 @@ export default class HomeScreen extends React.Component {
             disabled={this.state.moods.length == 0}
           />
         </View>
-        <View style={{padding: 0, height: Layout.window.height - 120}}>
+        <View style={
+          {padding: 0, height: Layout.window.height - ifIphoneX(200, 120)}}>
         <EmojiInput
           enableFrequentlyUsedEmoji={false}
           categoryFontSize={32}

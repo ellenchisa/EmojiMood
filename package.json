@@ -20,6 +20,7 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-emoji-input": "^1.1.8",
+    "react-native-iphone-x-helper": "^1.2.0",
     "react-native-uuid": "^1.4.9",
     "react-navigation": "^2.18.2"
   },

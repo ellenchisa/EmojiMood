@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -16,6 +17,10 @@ export const Styles = {
     flex: 1,
     flexDirection: 'column',
     flexWrap: 'wrap',
-    paddingTop: 20,
+    ...ifIphoneX({
+            paddingTop: 50
+        }, {
+            paddingTop: 20
+        })
   }
 }
