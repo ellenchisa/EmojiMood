@@ -6,10 +6,12 @@
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
-      "ios",
-      "android"
+      "ios", 
     ],
-    "version": "1.0.0",
+    "ios": {
+      "bundleIdentifier": "com.EllenChisa.EmojiMood"
+    },
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -23,8 +25,5 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
     }
-  }
 }
