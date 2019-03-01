@@ -74,7 +74,7 @@ export default class HomeScreen extends React.Component {
   }
 
   clear = () => {
-    this.setState({moods: []})
+    this.setState({moods: this.state.moods.slice(0, -1)})
   }
 
   retryLoad = () => {
@@ -103,9 +103,9 @@ export default class HomeScreen extends React.Component {
         style={styles.container}
       >
         <View style={styles.top}>
-          <Icon.Feather
-            name="x-circle"
-            size={20}
+          <Icon.Ionicons
+            name="ios-backspace"
+            size={32}
             color={blankFace ? 'transparent' : Colors.tintFade}
             style={styles.iconButton}
             onPress={this.clear}
