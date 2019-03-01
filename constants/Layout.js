@@ -1,6 +1,8 @@
 import { Dimensions } from 'react-native';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 
+import Colors from './Colors';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -14,6 +16,7 @@ export default {
 
 export const Styles = {
 	container: {
+    backgroundColor: Colors.background,
     flex: 1,
     flexDirection: 'column',
     flexWrap: 'wrap',
@@ -23,4 +26,8 @@ export const Styles = {
             paddingTop: 20
         })
   }
+}
+
+export const NavBarOpts = {
+  headerTintColor: Colors.headerTint
 }

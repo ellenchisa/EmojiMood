@@ -13,14 +13,13 @@ import {
 import { StackActions } from 'react-navigation';
 import { Icon } from 'expo';
 
-import { MonoText } from '../components/StyledText';
 import EmojiInput from 'react-native-emoji-input';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 import Layout from '../constants/Layout';
 import { HOST } from '../constants/Dark';
 import Colors from '../constants/Colors';
-import { Styles } from '../constants/Layout';
+import { Styles, NavBarOpts } from '../constants/Layout';
 import ErrorPage from '../components/ErrorPage';
 
 const toStatsScreen = StackActions.push({
@@ -29,8 +28,10 @@ const toStatsScreen = StackActions.push({
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Checkin',
-    headerBackTitle: 'Checkin',
+    ...NavBarOpts,
+    title: 'How are you feeling?',
+    headerBackTitle: 'Check-in',
+    headerTransparent: true
   };
 
   constructor(props) {
@@ -66,9 +67,10 @@ export default class HomeScreen extends React.Component {
       })
       .then( (response) => {
         this.setState({moods: []})
-        this.toStatsScreen()
       } )
       .catch( (error) => this.setState({error}) );
+
+      this.toStatsScreen()
   }
 
   clear = () => {
@@ -104,7 +106,7 @@ export default class HomeScreen extends React.Component {
           <Icon.Feather
             name="x-circle"
             size={20}
-            color={blankFace ? 'transparent' : Colors.tintColor}
+            color={blankFace ? 'transparent' : Colors.tintFade}
             style={styles.iconButton}
             onPress={this.clear}
           />
@@ -112,12 +114,12 @@ export default class HomeScreen extends React.Component {
           <Icon.Feather
             name="arrow-up-circle"
             size={32}
-            color={blankFace ? 'grey' : Colors.tintColor}
+            color={blankFace ? Colors.grey : Colors.tintColor}
             style={styles.iconButton}
             onPress={this.postMoods} />
         </View>
         <View style={
-          {padding: 0, height: Layout.window.height - ifIphoneX(200, 120)}}>
+          {padding: 0, height: Layout.window.height - ifIphoneX(160, 120)}}>
         <EmojiInput
           enableFrequentlyUsedEmoji={false}
           categoryFontSize={32}
@@ -125,9 +127,11 @@ export default class HomeScreen extends React.Component {
           categoryLabelTextStyle={styles.catLabel}
           enableSearch={false}
           showCategoryTab={true}
-          keyboardBackgroundColor='transparent'
+          keyboardBackgroundColor={Colors.keyboardBackground}
           onEmojiSelected={this.update}
-          emojiFontSize={40}
+          emojiFontSize={32}
+          categoryHighlightColor={Colors.tintColor}
+          categoryUnhighlightedColor={Colors.tintFade}
         />
         </View>
         </View>
@@ -146,7 +150,8 @@ const styles = StyleSheet.create({
     height: 50,
   },
   displayText: {
-    padding: 2,
+    paddingLeft: 2,
+    paddingRight: 2,
     fontSize: 32,
     flex: 5,
     textAlign: 'center'

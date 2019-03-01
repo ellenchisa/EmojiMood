@@ -15,13 +15,17 @@ const skyDark = '#521F46'
 
 export default {
   tintColor: skyBright,
-  tabIconDefault: '#FFD162',
-  tabIconSelected: seaDark,
-  tabBar: sunBright,//'#E9E9EF',
+  tintFade: skyPrimary,
+  grey: '#aaa',
 
+  background: seaLight,
   gradient: [skyPrimary, seaPrimary, sunBright],
 
   text: skyDark,
+
+  headerTint: seaDark,
+
+  keyboardBackground: seaPrimary,
 
   statsBar: [seaBright, skyBright],
   statsBartx: [seaLight, skyLight],

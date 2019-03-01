@@ -3,7 +3,7 @@ import { FlatList, View, StyleSheet, Text, AsyncStorage } from 'react-native';
 import { Icon } from 'expo';
 
 import { HOST } from '../constants/Dark';
-import { Styles } from '../constants/Layout';
+import { Styles, NavBarOpts } from '../constants/Layout';
 import Colors from '../constants/Colors';
 import ErrorPage from '../components/ErrorPage';
 
@@ -34,7 +34,12 @@ const renderStatsItem = (max) => {
 
 export default class StatsScreen extends React.Component {
   static navigationOptions = {
-    title: 'Stats'
+    ...NavBarOpts,
+    title: 'Mood Log',
+    headerStyle: {
+      backgroundColor: Colors.background,
+      borderBottomColor: 'transparent'
+    },
   };
 
   constructor(props){
@@ -85,14 +90,18 @@ export default class StatsScreen extends React.Component {
     const {renderStats, statsData, listData} = this.state;
 
     const header =
-    (<View style={{flex:1 , flexDirection: 'row', justifyContent: 'flex-end'}}>
+    (<View style={styles.header}>
         <Icon.Feather
           name="list"
           size={24}
+          color={renderStats ? Colors.tintFade : Colors.tintColor}
+          style={styles.headerItem}
           onPress={() => this.toggleStats(false)} />
         <Icon.Feather
           name="bar-chart"
           size={24}
+          color={renderStats ? Colors.tintColor : Colors.tintFade}
+          style={styles.headerItem}
           onPress={() => this.toggleStats(true)} />
     </View>)
 
@@ -120,12 +129,14 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
   },
   header: {
-    textAlign: 'center',
-    marginBottom: 10,
-    marginTop: 10,
-    fontWeight: 'bold',
-    fontSize: 15,
-    color: Colors.text,
+    flex:1 ,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingRight: 8,
+    paddingBottom: 12,
+  },
+  headerItem: {
+    marginRight: 8
   },
   item: {
     flex: 1,
