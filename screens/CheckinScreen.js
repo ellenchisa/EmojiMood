@@ -66,11 +66,11 @@ export default class HomeScreen extends React.Component {
         }),
       })
       .then( (response) => {
-        this.setState({moods: []})
+        this.setState({moods: []});
       } )
       .catch( (error) => this.setState({error}) );
 
-      this.toStatsScreen()
+      this.toStatsScreen();
   }
 
   clear = () => {

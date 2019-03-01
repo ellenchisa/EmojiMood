@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   headerItem: {
-    marginRight: 8
+    marginRight: 16
   },
   item: {
     flex: 1,

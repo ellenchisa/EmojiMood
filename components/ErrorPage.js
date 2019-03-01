@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, Button, Image } from 'react-native';
-import { LinearGradient } from 'expo';
+import { View, StyleSheet, Text, Button, Image } from 'react-native';
 
 import { Styles } from '../constants/Layout';
 import Colors from '../constants/Colors';
@@ -9,8 +8,7 @@ export default class ErrorPage extends React.Component {
 
 	render(){
 		return (
-			<LinearGradient
-				colors={Colors.gradient}
+			<View
 				style={styles.container}
 			>
 				<Image
@@ -20,7 +18,7 @@ export default class ErrorPage extends React.Component {
 				<Button
 					color={Colors.tintColor}
 					onPress={this.props.retryAction} title="Try Again" />
-			</LinearGradient>
+			</View>
 		)
 	}
 }
@@ -30,6 +28,6 @@ const styles = StyleSheet.create({
   	...Styles.container,
   	padding: 20,
   	justifyContent: 'center',
-  	alignItems: 'center'
+  	alignItems: 'center',
   },
 });
