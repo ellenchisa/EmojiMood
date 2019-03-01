@@ -1,23 +1,49 @@
 import React from 'react';
 import { FlatList, View, StyleSheet, Text, AsyncStorage } from 'react-native';
-import { ExpoConfigView } from '@expo/samples';
-import { LinearGradient } from 'expo';
+import { Icon } from 'expo';
 
 import { HOST } from '../constants/Dark';
 import { Styles } from '../constants/Layout';
 import Colors from '../constants/Colors';
 import ErrorPage from '../components/ErrorPage';
 
+const renderHistoryItem = ({item}) => {
+  return (<View style={styles.listitem}>
+    <Text style={styles.emojis}>{item.emojis}</Text>
+    <Text style={styles.date}>{(new Date(item.date.value)).toLocaleString('en-US')}</Text>
+  </View>)
+}
+
+const renderStatsItem = (max) => {
+  return ({item, index}) => (<View style={styles.item}>
+    <Text style={styles.emoji}>{item.emoji}</Text>
+    <View
+      style={{...styles.count,
+        flex: item.count,
+        backgroundColor: Colors.statsBar[index%2]
+      }}
+    ><Text
+      style={{
+        ...styles.countText,
+        color: Colors.statsBartx[index%2]
+      }}
+      >{item.count}</Text></View>
+    <View style={{flex: max - item.count}}></View>
+  </View>)
+}
+
 export default class StatsScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    title: 'Stats'
   };
 
   constructor(props){
     super(props);
     this.state = {
-      dataSource : [],
-      error: null
+      listData: [],
+      statsData: [],
+      error: null,
+      renderStats: true,
     }
   }
 
@@ -28,11 +54,19 @@ export default class StatsScreen extends React.Component {
 
 
   load = async () => {
-     const deviceid = await AsyncStorage.getItem('deviceid');
-    return fetch(`${HOST}/emojicount?device=${deviceid}`)
-    .then( (response) => response.json() )
-    .then( (response) => this.setState({ dataSource: response }) )
-    .catch( (error) => this.setState({error}) );
+    const deviceid = await AsyncStorage.getItem('deviceid');
+
+    if (this.state.renderStats) {
+      return fetch(`${HOST}/emojicount?device=${deviceid}`)
+      .then( (response) => response.json() )
+      .then( (response) => this.setState({ statsData : response }) )
+      .catch( (error) => this.setState({error}) );
+    } else {
+      return fetch(`${HOST}/checkins?device=${deviceid}`)
+      .then( (response) => response.json() )
+      .then( (response) => this.setState({listData: response}) )
+      .catch( (error) => this.setState({error}) );
+    }
   }
 
   retryLoad = () => {
@@ -40,42 +74,43 @@ export default class StatsScreen extends React.Component {
     this.load()
   }
 
+  toggleStats = (renderStats) => {
+    this.setState({renderStats})
+    this.load()
+  }
 
   render() {
     if (this.state.error) return (<ErrorPage retryAction={this.retryLoad} />)
 
-    const max = this.state.dataSource.reduce((m, e) => e.count > m ? e.count : m, 0)
+    const {renderStats, statsData, listData} = this.state;
 
-    const renderItem = ({item, index}) => {
-      return (<View style={styles.item}>
-        <Text style={styles.emoji}>{item.emoji}</Text>
-        <View
-          style={{...styles.count,
-            flex: item.count,
-            backgroundColor: Colors.statsBar[index%2]
-          }}
-        ><Text
-          style={{
-            ...styles.countText,
-            color: Colors.statsBartx[index%2]
-          }}
-          >{item.count}</Text></View>
-        <View style={{flex: max - item.count}}></View>
-      </View>)
+    const header =
+    (<View style={{flex:1 , flexDirection: 'row', justifyContent: 'flex-end'}}>
+        <Icon.Feather
+          name="list"
+          size={24}
+          onPress={() => this.toggleStats(false)} />
+        <Icon.Feather
+          name="bar-chart"
+          size={24}
+          onPress={() => this.toggleStats(true)} />
+    </View>)
+
+    const dataSource = renderStats ? statsData : listData;
+    let renderFn = renderHistoryItem;
+    if(renderStats){
+      const max = statsData.reduce((m, e) => e.count > m ? e.count : m, 0);
+      renderFn = renderStatsItem(max)
     }
 
-    return (
-      <LinearGradient
-        colors={Colors.gradient}
-        style={styles.container}
-      >
-      <FlatList
-      data={this.state.dataSource}
-      renderItem={renderItem}
+    return (<FlatList
+      data={dataSource}
+      renderItem={renderFn}
       keyExtractor={(item, index) => '' + index}
-      ListHeaderComponent={(<Text style={styles.header}>Usage Frequency</Text>)}
-     />
-   </LinearGradient>)
+      style={styles.container}
+      ListHeaderComponent={header}
+   />)
+
   }
 }
 
@@ -115,5 +150,17 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'right',
     paddingRight: 8,
+  },
+  listitem: {
+    marginBottom: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  emojis: {
+    fontSize: 32
+  },
+  date: {
+    fontSize: 14,
+    color: Colors.text
   }
 });

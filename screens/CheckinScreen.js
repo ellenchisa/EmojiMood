@@ -10,7 +10,8 @@ import {
   View,
   AsyncStorage,
 } from 'react-native';
-import { LinearGradient } from 'expo';
+import { StackActions } from 'react-navigation';
+import { Icon } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 import EmojiInput from 'react-native-emoji-input';
@@ -22,9 +23,14 @@ import Colors from '../constants/Colors';
 import { Styles } from '../constants/Layout';
 import ErrorPage from '../components/ErrorPage';
 
+const toStatsScreen = StackActions.push({
+  routeName: 'Stats'
+});
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    title: 'Checkin',
+    headerBackTitle: 'Checkin',
   };
 
   constructor(props) {
@@ -33,6 +39,10 @@ export default class HomeScreen extends React.Component {
       moods: [],
       error: null
     };
+  }
+
+  toStatsScreen = () => {
+    this.props.navigation.dispatch(toStatsScreen);
   }
 
   moodsToString = () => {
@@ -54,7 +64,10 @@ export default class HomeScreen extends React.Component {
           device: deviceid
         }),
       })
-      .then( (response) => this.setState({moods: []}) )
+      .then( (response) => {
+        this.setState({moods: []})
+        this.toStatsScreen()
+      } )
       .catch( (error) => this.setState({error}) );
   }
 
@@ -81,26 +94,27 @@ export default class HomeScreen extends React.Component {
         message="Oops! We are having trouble receiving your moods." />)
 
     const displayText = this.moodsToString();
+    const blankFace = this.state.moods.length == 0;
+
     return (
-      <LinearGradient
-        colors={Colors.gradient}
+      <View
         style={styles.container}
       >
         <View style={styles.top}>
-          <Button
-            color={Colors.tintColor}
-            style={styles.postButton}
+          <Icon.Feather
+            name="x-circle"
+            size={20}
+            color={blankFace ? 'transparent' : Colors.tintColor}
+            style={styles.iconButton}
             onPress={this.clear}
-            title="Clear"
           />
           <Text style={styles.displayText}>{displayText}</Text>
-          <Button
-            color={Colors.tintColor}
-            style={styles.postButton}
-            onPress={this.postMoods}
-            title="Save"
-            disabled={this.state.moods.length == 0}
-          />
+          <Icon.Feather
+            name="arrow-up-circle"
+            size={32}
+            color={blankFace ? 'grey' : Colors.tintColor}
+            style={styles.iconButton}
+            onPress={this.postMoods} />
         </View>
         <View style={
           {padding: 0, height: Layout.window.height - ifIphoneX(200, 120)}}>
@@ -109,14 +123,14 @@ export default class HomeScreen extends React.Component {
           categoryFontSize={32}
           categoryLabelHeight={20}
           categoryLabelTextStyle={styles.catLabel}
-          enableSearch={true}
-          showCategoryTab={false}
+          enableSearch={false}
+          showCategoryTab={true}
           keyboardBackgroundColor='transparent'
           onEmojiSelected={this.update}
-          emojiFontSize={32}
+          emojiFontSize={40}
         />
         </View>
-        </LinearGradient>
+        </View>
       );
   }
 }
@@ -137,8 +151,11 @@ const styles = StyleSheet.create({
     flex: 5,
     textAlign: 'center'
   },
-  postButton: {
-    width: 20,
+  iconButton: {
+    width: 30,
+    paddingLeft: 2,
+    paddingRight: 2,
+    textAlign: 'center',
     flex: 1
   },
   catLabel: {

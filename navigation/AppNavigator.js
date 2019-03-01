@@ -1,8 +1,10 @@
 import React from 'react';
-import { createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
-import MainTabNavigator from './MainTabNavigator';
+import CheckinScreen from '../screens/CheckinScreen';
+import StatsScreen from '../screens/StatsScreen';
 
-export default createSwitchNavigator({
-  Main: MainTabNavigator
+export default createStackNavigator({
+  Checkin: CheckinScreen,
+  Stats: StatsScreen
 });
