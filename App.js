@@ -1,13 +1,64 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
+import { Permissions, AppLoading, Asset, Font, Icon, Notifications } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import uuid from 'react-native-uuid';
+
+  askPermissions = async () => {
+  const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  let finalStatus = existingStatus;
+  if (existingStatus !== 'granted') {
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    finalStatus = status;
+  }
+  if (finalStatus !== 'granted') {
+    return false;
+  }
+  return true;
+};
+
+sendNotificationImmediately = async () => {
+  let notificationId = await Notifications.presentLocalNotificationAsync({
+    title: 'This is crazy',
+    body: 'Your mind will blow after reading this',
+  });
+  console.log(notificationId); // can be saved in AsyncStorage or send to server
+};
+
+scheduleNotification = async () => {
+  let notificationId = await Notifications.scheduleLocalNotificationAsync(
+    {
+      title: "Reminder to log your mood!",
+      body: 'Share five emojis that summarize your day.',
+    },
+    {
+      repeat: 'minute',
+      time: new Date().getTime() + 10000,
+    },
+  );
+  console.log(notificationId);
+};
+
+
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
+
+
+  componentDidMount = async () => {
+    askPermissions()
+    .then((perm) => {
+      console.log('requested permissions', perm)
+      if(perm) {
+        scheduleNotification()
+      }
+    }, (error) => {
+      console.log('error in getting permissions')
+      console.log(error)
+    })
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
