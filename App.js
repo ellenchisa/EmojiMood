@@ -48,11 +48,12 @@ export default class App extends React.Component {
 
 
   componentDidMount = async () => {
+    alert('If you would like a daily reminder to log your mood, please grant permissions.');
     askPermissions()
     .then((perm) => {
       console.log('requested permissions', perm)
       if(perm) {
-        scheduleNotification()
+        sendNotificationImmediately()
       }
     }, (error) => {
       console.log('error in getting permissions')
