@@ -1,10 +1,10 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, AsyncStorage, Alert } from 'react-native';
 import { Permissions, AppLoading, Asset, Font, Icon, Notifications } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import uuid from 'react-native-uuid';
 
-  askPermissions = async () => {
+askPermissions = async () => {
   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
   let finalStatus = existingStatus;
   if (existingStatus !== 'granted') {
@@ -17,6 +17,15 @@ import uuid from 'react-native-uuid';
   return true;
 };
 
+checkPermissions = async() => {
+  const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  console.log('hello:' + existingStatus)
+  const hasAsked = await AsyncStorage.getItem('hasAsked')
+
+  console.log('hasAsked' + hasAsked);
+  return hasAsked != null || existingStatus == 'granted' || existingStatus == 'denied';
+}
+
 sendNotificationImmediately = async () => {
   let notificationId = await Notifications.presentLocalNotificationAsync({
     title: 'This is crazy',
@@ -27,14 +36,14 @@ sendNotificationImmediately = async () => {
 
 scheduleNotification = async () => {
   let notificationId = await Notifications.scheduleLocalNotificationAsync(
-    {
-      title: "Reminder to log your mood!",
-      body: 'Share five emojis that summarize your day.',
-    },
-    {
-      repeat: 'minute',
-      time: new Date().getTime() + 10000,
-    },
+  {
+    title: "Reminder to log your mood!",
+    body: 'Share five emojis that summarize your day.',
+  },
+  {
+    repeat: 'day',
+    time: new Date().getTime() + 10000,
+  },
   );
   console.log(notificationId);
 };
@@ -48,60 +57,68 @@ export default class App extends React.Component {
 
 
   componentDidMount = async () => {
-    alert('If you would like a daily reminder to log your mood, please grant permissions.');
-    askPermissions()
-    .then((perm) => {
-      console.log('requested permissions', perm)
-      if(perm) {
-        sendNotificationImmediately()
-      }
-    }, (error) => {
-      console.log('error in getting permissions')
-      console.log(error)
+    checkPermissions().then((isGranted) => {
+      if (isGranted){return}
+        AsyncStorage.setItem('hasAsked', 'true')
+      Alert.alert('Daily Reminder', 'Do you want to enable notifications to get a daily reminder?', 
+      [{text:'yes',onPress:()=>{
+        askPermissions()
+        .then((perm) => {
+          console.log('requested permissions', perm)
+          if(perm) {
+            scheduleNotification()
+          }
+        }, (error) => {
+          console.log('error in getting permissions')
+          console.log(error)
+        })
+      }},{text:'no'}]);
     })
+    
+    
   }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
+        startAsync={this._loadResourcesAsync}
+        onError={this._handleLoadingError}
+        onFinish={this._handleFinishLoading}
         />
-      );
+        );
     } else {
       return (
         <View style={styles.container}>
-          {Platform.OS === 'ios' &&
-            <StatusBar backgroundColor='transparent'  />}
-          <AppNavigator />
+        {Platform.OS === 'ios' &&
+        <StatusBar backgroundColor='transparent'  />}
+        <AppNavigator />
         </View>
-      );
+        );
+      }
     }
-  }
 
-  _loadResourcesAsync = async () => {
-    return Promise.all([
+    _loadResourcesAsync = async () => {
+      return Promise.all([
       Asset.loadAsync([
-        require('./assets/images/robot-dev.png'),
-        require('./assets/images/robot-prod.png'),
-        require('./assets/images/splash.png'),
-        require('./assets/images/icon.png'),
-        require('./components/img/error.png'),
+      require('./assets/images/robot-dev.png'),
+      require('./assets/images/robot-prod.png'),
+      require('./assets/images/splash.png'),
+      require('./assets/images/icon.png'),
+      require('./components/img/error.png'),
       ]),
       AsyncStorage.getItem('deviceid').then((res) => {
-          if(res==null){
-            const deviceid = uuid.v4();
-            AsyncStorage.setItem('deviceid', deviceid);
-            return deviceid;
-          } else return res;
+        if(res==null){
+          const deviceid = uuid.v4();
+          AsyncStorage.setItem('deviceid', deviceid);
+          return deviceid;
+        } else return res;
       }),
-    ]);
-  };
+      ]);
+    };
 
-  _handleLoadingError = error => {
-    // In this case, you might want to report the error to your error
+    _handleLoadingError = error => {
+      // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
     console.warn(error);
   };
